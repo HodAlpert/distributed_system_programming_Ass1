@@ -1,0 +1,12 @@
+[submodule "master"]
+	path = master
+	url = https://github.com/hod246/Manager.git
+[submodule "Manager"]
+	path = Manager
+	url = https://github.com/hod246/Manager.git
+[submodule "LocalApplication"]
+	path = LocalApplication
+	url = https://github.com/hod246/LocalApplication.git
+[submodule "Worker"]
+	path = Worker
+	url = https://github.com/hod246/worker.git
