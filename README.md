@@ -77,7 +77,7 @@ The manager is a Single Point of Failure in case it crashes. but since all **Cli
 messages and submit tasks it is very unlikely to happen. 
 if other thread failed- it will be submitted again, until it finishes.
 
-In case a worker fails- than another worker will be able to take it's place 
+In case a worker fails- than another worker will be able to take it's place in all unfinished tasks after two minutes
 
 ## Versioning
 
