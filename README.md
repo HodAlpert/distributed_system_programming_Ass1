@@ -71,6 +71,9 @@ If all tasks of this client are done- than **ReceiveNewDonePDFTask** will submit
 ### Worker:
 
 The worker is a single-threaded process (which can be easily changed if needed). since the LocalApplication can decide how many workers it wants for it's tasks, worker scalability concern are up to the client.
+
+Also each worker is polling one message at a time to guarantee that in case there are several messages waiting, 
+it will be distributed between the workers as best as possible.
 ## persistence:
 
 The manager is a Single Point of Failure in case it crashes. but since all **ClientListener** and **WorkerListener** does is receive 
@@ -79,9 +82,18 @@ if other thread failed- it will be submitted again, until it finishes.
 
 In case a worker fails- than another worker will be able to take it's place in all unfinished tasks after two minutes
 
-## Versioning
+## Threads:
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
+In the manager I used an executor with unlimited number of threads since all threads spend most of their time waiting for I\O with independent tasks,
+ in order to support multiple clients.
+ 
+In the worker on the other hand- since the instance type has only one core- and there is no importance to parallel computing.
+I chose to do it with a single thread.
+
+## Multiple Clients:
+
+each client has an auto-generated unique ID, with which the manager can identify which task belong to which client.
+and the client knows to look at SQS messages with this Id as attribute.
 
 ## Authors
 
@@ -89,14 +101,3 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 
 **ID**: *305452146*
 
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
-## Acknowledgments
-
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
