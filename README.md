@@ -6,6 +6,12 @@
 ```
 sudo pip3 install --upgrade awscli
 ```
+than ask me for credentials and use 
+```
+aws configure
+```
+to configure them
+
 * **maven:**
 
 [Maven](https://www.javahelps.com/2017/10/install-apache-maven-on-linux.html)- Instructions on installing maven
@@ -36,15 +42,36 @@ start LocalApplication with input file of your selection
 ```
 java -jar target/Local-application-1.0-SNAPSHOT.jar <inputFileName> <outputFileName> <n> <terminate (optionatl)>
 ```
-## Built With
+## Security:
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
+* Local application can be started only if access-key, secret and region was configured using aws cli command- credentials are hard-coded into the repository.
+* The Manager and Worker instances has instance-profile with role which gives them permission specifically on EC2, SQS, S3, and IAM for session of 2 hours
 
-## Contributing
+## Scalability:
 
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
+### Manager:
+
+In order to handle threads I used _Executors.newCachedThreadPool()_.
+
+There are two main threads submitted on initialization of the manager: **ClientListener** and **WorkerListener**.
+
+#### ClientListener:
+
+Recieve messages from *manager-queue.fifo* and submit a new **ReceiveNewClientTask** to the executor each time a new client arrives.
+
+The **ReceiveNewClientTask** download the input-file from the client and submits a new **SendNewPDFTask** task to the executor on each line in the input file, which sends an SQS message via *worker-queue.fifo* to the worker.
+
+#### WorkerListener:
+
+Recives messages from *manager-queue-from-worker.fifo* and submit a **ReceiveNewDonePDFTask** task to the executor on each message.
+
+Each message from the worker has uniqe client ID with which the manager knows which client requested the task.
+If all tasks of this client are done- than **ReceiveNewDonePDFTask** will submit a **WrapThisUp** task which will generate summary file and send it back to the specific client.
+
+### Worker:
+
+The worker is a single-threaded proccess (which can be easily changed if needed). since the LocalApplication can decide how many workers it wants for it's tasks, worker scalability concern are up to the client.
+
 
 ## Versioning
 
