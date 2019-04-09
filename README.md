@@ -1,7 +1,14 @@
 # Distributed Systems Programming
 
-Name: Hod Alpert
-ID: 305452146
+### Requirements
+
+* **awscli:**
+```
+sudo pip3 install --upgrade awscli
+```
+* **maven:**
+
+[Maven](https://www.javahelps.com/2017/10/install-apache-maven-on-linux.html)- Instructions on installing maven
 
 ### Installing
 
@@ -21,10 +28,6 @@ git checkout master
 install the maven project
 ```
 mvn compile package
-```
-start LocalApplication with input file of your selection
-```
-java -jar target/Local-application-1.0-SNAPSHOT.jar <inputFileName> <outputFileName> <n> <terminate (optionatl)>
 ```
 
 ## Getting Started
@@ -49,7 +52,9 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 
 ## Authors
 
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
+**Name**: *Hod Alpert*
+
+**ID**: *305452146*
 
 See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 
