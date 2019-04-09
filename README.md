@@ -70,8 +70,14 @@ If all tasks of this client are done- than **ReceiveNewDonePDFTask** will submit
 
 ### Worker:
 
-The worker is a single-threaded proccess (which can be easily changed if needed). since the LocalApplication can decide how many workers it wants for it's tasks, worker scalability concern are up to the client.
+The worker is a single-threaded process (which can be easily changed if needed). since the LocalApplication can decide how many workers it wants for it's tasks, worker scalability concern are up to the client.
+## persistence:
 
+The manager is a Single Point of Failure in case it crashes. but since all **ClientListener** and **WorkerListener** does is receive 
+messages and submit tasks it is very unlikely to happen. 
+if other thread failed- it will be submitted again, until it finishes.
+
+In case a worker fails- than another worker will be able to take it's place 
 
 ## Versioning
 
