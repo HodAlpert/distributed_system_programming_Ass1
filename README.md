@@ -5,7 +5,7 @@ ID: 305452146
 
 ### Installing
 
-in order to install the package clone first clone it using 
+in order to install the package first clone it using 
 
 ```
 git clone --recursive https://github.com/hod246/distributed_system_programming_Ass1.git
